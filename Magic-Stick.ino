@@ -92,13 +92,13 @@ void updateControl(){
   if ((tilt_x > 2*PI-TILT_LIMIT) && (tilt_x > TILT_LIMIT)){
      vel = 0.0; acc= 0.0;
      p_vel = 0.0; p_acc=0.0;
-     //Serial.print("zero ");
+//     Serial.print("zero ");
   }else if ((tilt_x < 2*PI-TILT_LIMIT) && (tilt_x > PI)){
     rollingDown(tilt_x, accx);
-    //Serial.print ("down ");
+//    Serial.print ("down ");
   }else if ((tilt_x > TILT_LIMIT) && (tilt_x < PI)){
     rollingUp(tilt_x, accx);  
-    //Serial.print ("up ");
+//    Serial.print ("up ");
   }
 
 //  Serial.print (tilt_x);
