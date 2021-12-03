@@ -124,9 +124,13 @@ void getAccInfo(){
       yAng = map(accy_i,minVal,maxVal,-90,90);
       zAng = map(accz_i,minVal,maxVal,-90,90);
 
+//      tilt_x= RAD_TO_DEG * (atan2(-yAng, -zAng)+PI);
+//      tilt_y= RAD_TO_DEG * (atan2(-xAng, -zAng)+PI);
+//      tilt_z= RAD_TO_DEG * (atan2(-yAng, -xAng)+PI);
+
       tilt_x= (atan2(-yAng, -zAng)+PI);
-      tilt_y= RAD_TO_DEG * (atan2(-xAng, -zAng)+PI);
-      tilt_z= RAD_TO_DEG * (atan2(-yAng, -xAng)+PI);
+      tilt_y= (atan2(-xAng, -zAng)+PI);
+      tilt_z= (atan2(-yAng, -xAng)+PI);
       
 //      Serial.print("x Angle ");Serial.print(tilt_x);
 //      Serial.print("\ty Angle ");Serial.print(tilt_y);

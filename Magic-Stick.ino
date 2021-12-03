@@ -77,15 +77,15 @@ float TILT_LIMIT = DEG_TO_RAD * 1;
 void updateControl(){
   getAccInfo();  // gets the accelerometer info 
   
-  if ((tilt_x < 2*PI-TILT_LIMIT) && (tilt_x > PI)){
-    rollingDown(tilt_x, accy);
-//    Serial.print ("down ");
-  }else if ((tilt_x > TILT_LIMIT) && (tilt_x < PI)){
-    rollingUp(tilt_x, accy);  
-//    Serial.print ("up ");
+  if ((tilt_y < 2*PI-TILT_LIMIT) && (tilt_y > PI)){
+    rollingDown(tilt_y, accy);
+    //Serial.print ("down ");
+  }else if ((tilt_y > TILT_LIMIT) && (tilt_y < PI)){
+    rollingUp(tilt_y, accy);  
+    //Serial.print ("up ");
   }
 
-//  Serial.print (tilt_x);
+//  Serial.print (tilt_y);
 //  Serial.print (",");
 //  Serial.print (acc);
 //  Serial.print (",");
