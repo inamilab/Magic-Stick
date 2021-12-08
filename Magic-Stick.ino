@@ -3,19 +3,23 @@
 #include <Oscil.h> // oscillator template
 #include "ball_table.h"
 
-#define CONTROL_RATE 1024 // Hz, powers of 2 are most reliable
+#define CONTROL_RATE 256 // Hz, powers of 2 are most reliable
 
 // ================================================================
 // ===                      INITIAL SETUP                       ===
 // ================================================================
 
+float acc=0; float p_acc=0;  // simulated marbel acceleration
+float vel=0; float p_vel=0;  // simulated marbel velocity
+float dist=1.0; float p_dist=1.0;  // simulated marbel distance
+const float LEN = 0.6; //2.0; //stick lenght in m
+const float LEN_MM = 600; //2000; //stick lenght in mm
+const float H = 1.0/256.0;  // drag simulation teime step in seconds
+const float HH = 0.03; //1.0/256.0;  // impact simulation time step in seconds
+// variables to control the impact decay rate
 float impact_vel=0;
-float acc=0; float p_acc=0;
-float vel=0; float p_vel=0;
-float dist=1.0; float p_dist=1.0; float pp_dist=1.0;
-const float LEN = 2.0; //stick LEN in m
-const float LEN_MM = 2000; //stick LEN in mm
-const float H = 1.0/256.0;  // in seconds
+int impact_curve = 1;
+float i_dist = 0.0;
 
 void setup(){
   Serial.begin(115200);
@@ -26,6 +30,21 @@ void setup(){
   startMozzi(CONTROL_RATE);
 }
 
+// function to calculate the marvel impact decay sine wave
+void marbelImpact(boolean up){
+    
+  impact_curve = (int)(impact_vel * exp(-(i_dist)*(i_dist)));
+  i_dist = i_dist + (HH * ((impact_vel )/ 2.0)  );  // HH must be adjusted to have an adecuate decay
+  if (impact_curve < 0){ impact_curve = 0;}
+
+  // SERIAL DEBUG
+  // Serial.print (impact_vel);
+  // Serial.print (",");
+  // Serial.println (impact_curve);
+  // Serial.print (",");
+  // Serial.println (i_dist);
+}
+
 
 // Function when the ball rolls up
 void rollingUp(float roll, float az){
@@ -33,11 +52,9 @@ void rollingUp(float roll, float az){
   //acc = az;
 
   if (p_dist > LEN){
-    if (vel != 0) { 
-      impact_vel = vel; 
-      
-    }
+    if (vel != 0) { impact_vel = vel; i_dist = 0;  }  //impact_vel = vel; i_dist = dist;
     vel = 0;
+    marbelImpact(LEN);
   }else{
     vel = p_vel + (H * ( (p_acc + acc ) / 2.0 )   ) ;
   }
@@ -59,13 +76,14 @@ void rollingDown(double roll, float az){
    }
 
    if (p_dist < 0){
-      if (vel != 0) { impact_vel = vel; }
-      vel = 0;
+      if (vel != 0)  { impact_vel = -vel;  i_dist = 0;  }  // impact_vel = -vel;  i_dist = LEN;
+      vel = 0;  
+      marbelImpact(0);  
    }else{
       vel = p_vel + (H * ( (p_acc + acc ) / 2.0 )   ) ;
    }
 
-   dist = p_dist + (H *((p_vel + vel)/2.0 ) ); 
+   dist = p_dist + (H *((p_vel + vel)/2.0 ) );
    
    p_acc = acc;
    p_vel = vel;
@@ -102,7 +120,10 @@ int index = 0;
 int updateAudio(){
   dd =  (int)(dist * 1000);
   if ((dd < 0) || (dd > LEN_MM)){
-    return isinTable8[0];
+    dd = (int)(i_dist * 1000);
+    index = dd % 30;
+    return isinTable5[index] * impact_curve;
+    //return isinTable8[0];
   }
   index = dd % 30;
   return isinTable8[index];
