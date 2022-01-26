@@ -31,7 +31,7 @@ void setup(){
 }
 
 // function to calculate the marvel impact decay sine wave
-void marbelImpact(boolean up){
+void marbelImpact(){
     
   impact_curve = (4*impact_vel * exp(-(i_dist)*(i_dist)));
   i_dist = i_dist + (HH * ((impact_vel )/ 2.0)  );  // HH value was adjusted (but I cannot feel the relation velocity/impact force clearly)
@@ -55,7 +55,7 @@ void rollingUp(float roll, float az){
   if (p_dist > LEN){
     if (vel != 0) { impact_vel = vel; i_dist = 0;  }  //impact_vel = vel; i_dist = dist;
     vel = 0;
-    marbelImpact(LEN);
+    marbelImpact();
   }else{
     vel = p_vel + (H * ( (p_acc + acc ) / 2.0 )   ) ;
   }
@@ -79,7 +79,7 @@ void rollingDown(double roll, float az){
    if (p_dist < 0){
       if (vel != 0)  { impact_vel = -vel;  i_dist = 0;  }  // impact_vel = -vel;  i_dist = LEN;
       vel = 0;  
-      marbelImpact(0);  
+      marbelImpact();  
    }else{
       vel = p_vel + (H * ( (p_acc + acc ) / 2.0 )   ) ;
    }
