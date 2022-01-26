@@ -123,7 +123,7 @@ int updateAudio(){
   if ((dd < 0) || (dd > LEN_MM)){
     dd = (int)(i_dist * 1000);
     index = dd % 30;
-    return isinTable5[index] * impact_curve;
+    return isinTable8[index] * impact_curve;
     //return isinTable8[0];
   }
   index = dd % 30;
