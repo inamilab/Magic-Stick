@@ -15,15 +15,15 @@ float dist=1.0; float p_dist=1.0;  // simulated marbel distance
 const float LEN = 0.6; //2.0; //stick lenght in m
 const float LEN_MM = 600; //2000; //stick lenght in mm
 const float H = 1.0/256.0;  // drag simulation teime step in seconds
-const float HH = 0.03; //1.0/256.0;  // impact simulation time step in seconds
+const float HH = 0.4; // impact simulation time step in seconds (the smaller the larger the decay time)
 // variables to control the impact decay rate
 float impact_vel=0;
-int impact_curve = 1;
+float impact_curve = 1;
 float i_dist = 0.0;
 
 void setup(){
   Serial.begin(115200);
-  while (!Serial) delay(10); // will pause until serial console opens
+  while (!Serial) delay(10); // will pause until serial console opens-
   setup_accelero();
   vel = 0.0; acc= 0.0;
   p_vel = 0.0; p_acc=0.0;
@@ -33,16 +33,17 @@ void setup(){
 // function to calculate the marvel impact decay sine wave
 void marbelImpact(boolean up){
     
-  impact_curve = (int)(impact_vel * exp(-(i_dist)*(i_dist)));
-  i_dist = i_dist + (HH * ((impact_vel )/ 2.0)  );  // HH must be adjusted to have an adecuate decay
+  impact_curve = (4*impact_vel * exp(-(i_dist)*(i_dist)));
+  i_dist = i_dist + (HH * ((impact_vel )/ 2.0)  );  // HH value was adjusted (but I cannot feel the relation velocity/impact force clearly)
+  //dist = p_dist + (H *((p_vel + vel)/2.0 ) );
   if (impact_curve < 0){ impact_curve = 0;}
 
   // SERIAL DEBUG
   // Serial.print (impact_vel);
   // Serial.print (",");
-  // Serial.println (impact_curve);
+  // Serial.print (impact_curve);
   // Serial.print (",");
-  // Serial.println (i_dist);
+  // Serial.println (i_dist/100.0);
 }
 
 

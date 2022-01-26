@@ -16,6 +16,22 @@ This is the hardware requiered to build a rolling stone stick
     - ALPS transducers (available in the lab) GOOD
     - Haptuator (also available at the lab) NOT TESTED YET
 
+### Connection PINs (Arduino pro mini)
+
+
+![Arduino Mini Pro pinout](https://aws1.discourse-cdn.com/arduino/original/4X/8/0/0/800dd09ad2fdacc1312693079811b0f7bf3021a3.jpeg)
+
+
+Arduino PIN | Conection
+--- | ---
+SCL (pin D21) |  Accelerometer SCL pin
+SDA (pin D20) |  Accelerometer SDA pin
+GND  |  Accelerometer GND
+5V  |  Accelerometer 5V
+Audio PWM (pin D11)  |  Hapbeat audio IN (L/R)
+GND  |  Hapbeat audio GND
+
+
 ## Software
 To install some Arduino libraries are needed to make the software run: 
 - Mozzi (https://sensorium.github.io/Mozzi/)
